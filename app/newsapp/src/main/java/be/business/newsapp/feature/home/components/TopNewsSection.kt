@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,11 +25,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import be.business.newsapp.domain.model.Article
+import be.business.newsapp.core.domain.model.Article
 import be.business.newsapp.domain.model.NewsResponse
-import be.business.newsapp.feature.home.presentation.EmptyView
+import be.business.newsapp.ui.shared.EmptyView
+import be.business.newsapp.ui.shared.LoadingView
 import be.business.newsapp.ui.components.FilterIconButton
-import be.business.newsapp.ui.components.LoadingView
 import be.business.newsapp.ui.theme.AndroidPracticeTheme
 import be.business.newsapp.utils.countries
 import be.business.newsapp.utils.marginVertical
@@ -59,7 +58,8 @@ fun TopNewsSection(
     showChips: Boolean = false,
     showFilterView: Boolean = false,
     countrySelected: String? = null,
-    onCountrySelected: (String) -> Unit = {}
+    onCountrySelected: (String) -> Unit = {},
+    onArticleClick: (String) -> Unit = {}
 
 ) {
     Box(
@@ -83,16 +83,21 @@ fun TopNewsSection(
                 }
             )
             5.marginVertical()
-            if (articles.isEmpty()) {
-                EmptyView()
-            } else if (isLoading) {
+            if (isLoading && articles.isEmpty()) {
                 LoadingView()
+            } else if (articles.isEmpty()) {
+                EmptyView()
             } else LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(articles) { article ->
-                    NewsItemView(article, imageLoader, onFavClick = { onFavClick?.invoke(article) })
+                items(articles, key = { it.url ?: it.title }) { article ->
+                    NewsItemView(
+                        article = article,
+                        imageLoader = imageLoader,
+                        onFavClick = { onFavClick?.invoke(article) },
+                        onClick = { onArticleClick(article.url.orEmpty()) }
+                    )
                     5.marginVertical()
                 }
             }

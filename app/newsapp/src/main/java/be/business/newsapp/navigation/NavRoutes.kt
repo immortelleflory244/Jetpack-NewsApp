@@ -27,6 +27,9 @@ sealed interface NewsScreen : NavKey {
 
     @Serializable
     object Favourites : NewsScreen
+
+    @Serializable
+    object Login : NewsScreen
 }
 
 data class NavBarItem(

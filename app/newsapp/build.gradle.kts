@@ -6,7 +6,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias (libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.sqldelight)
 }
 
 android {
@@ -21,13 +22,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
     }
+
     val properties = Properties()
     val propertiesFile = rootProject.file("newsapp.properties")
     if (propertiesFile.canRead()) {
         properties.load(propertiesFile.inputStream())
     }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -37,21 +39,26 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
     }
+
     packaging {
         resources {
-            excludes += setOf(
-                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-            )
+            excludes += setOf("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
         }
     }
+
     flavorDimensions += listOf("environment")
     productFlavors {
         create("dev") {
@@ -68,14 +75,20 @@ android {
             buildConfigField(type = "String", name = "env", value = "\"prod\"")
         }
     }
+}
 
-
+sqldelight {
+    databases {
+        create("NewsSqlDatabase") {
+            packageName.set("be.business.newsapp.core.data.local.sqldelight")
+        }
+    }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -90,7 +103,6 @@ dependencies {
     implementation(libs.slf4j.android)
     implementation(libs.ktor.client.resources)
 
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -99,33 +111,31 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Navigation 3
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.material3.adaptive.navigation3)
     implementation(libs.kotlinx.serialization.core)
-    // Ktor
+
     implementation(libs.ktor.client.core)
     implementation(libs.logging.interceptor)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.moshi.kotlin.codegen)
-    //Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.ktor.client.cio)
 
-    //Coil
     implementation(libs.coil)
     implementation(libs.coil.compose)
-    // Hilt
+
     implementation(libs.hilt.android)
-    ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.hilt.lifecycle.viewmodel)
-    // Datastore
+
     implementation(libs.androidx.datastore.preferences)
-    // Room
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.runtime)
+
+    implementation(libs.sqldelight.android.driver)
+    implementation(libs.sqldelight.coroutines.extensions)
+
+    testImplementation(libs.kotlinx.coroutines.test)
 }

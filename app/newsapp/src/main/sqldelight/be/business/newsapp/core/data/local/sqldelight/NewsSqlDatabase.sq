@@ -1,0 +1,71 @@
+CREATE TABLE User (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE,
+    passwordHash TEXT NOT NULL
+);
+
+CREATE TABLE Favorites (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    articleId TEXT NOT NULL,
+    userId INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    author TEXT,
+    description TEXT,
+    imageUrl TEXT,
+    publishedAt TEXT,
+    content TEXT,
+    articleUrl TEXT,
+    UNIQUE(articleId, userId),
+    FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE
+);
+
+insertUser:
+INSERT INTO User(email, passwordHash)
+VALUES (?, ?);
+
+selectUserByEmail:
+SELECT * FROM User
+WHERE email = ?
+LIMIT 1;
+
+selectUserById:
+SELECT * FROM User
+WHERE id = ?
+LIMIT 1;
+
+insertFavorite:
+INSERT OR REPLACE INTO Favorites(
+    id,
+    articleId,
+    userId,
+    title,
+    author,
+    description,
+    imageUrl,
+    publishedAt,
+    content,
+    articleUrl
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteFavoriteByArticleAndUser:
+DELETE FROM Favorites
+WHERE articleId = ? AND userId = ?;
+
+selectFavoritesByUser:
+SELECT * FROM Favorites
+WHERE userId = ?
+ORDER BY id DESC;
+
+selectFavoriteByArticleAndUser:
+SELECT * FROM Favorites
+WHERE articleId = ? AND userId = ?
+LIMIT 1;
+
+countFavoritesByUser:
+SELECT COUNT(*) FROM Favorites
+WHERE userId = ?;
+
+selectFavoriteArticleIdsByUser:
+SELECT articleId FROM Favorites
+WHERE userId = ?;

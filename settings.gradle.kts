@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android Practice"
+rootProject.name = "NewsJetPackApp"
 include(":app")
-include(":app:newsapp")
+project(":app").projectDir = file("app/newsapp")

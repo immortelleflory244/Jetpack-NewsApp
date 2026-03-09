@@ -1,6 +1,5 @@
 package be.business.newsapp.core.di
 
-import be.business.newsapp.core.data.repository.NewsRepositoryImpl
 import be.business.newsapp.domain.repository.NewsRepository
 import be.business.newsapp.domain.usecase.news.AddToFavouritesUseCase
 import be.business.newsapp.domain.usecase.news.AddToFavouritesUseCaseImpl
@@ -14,7 +13,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
@@ -25,13 +23,9 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun providesAddToFavouritesUseCase(repo: NewsRepository): AddToFavouritesUseCase =
-        AddToFavouritesUseCaseImpl(repo)
+    fun provideAddToFavouritesUseCase(impl: AddToFavouritesUseCaseImpl): AddToFavouritesUseCase = impl
 
     @Provides
     @Singleton
-    fun provideGetFavouriteNewsUseCase(repo: NewsRepository): GetFavouriteNewsUseCase =
-        GetFavouriteNewsUseCaseImpl(repo)
-
-
+    fun provideGetFavouriteNewsUseCase(impl: GetFavouriteNewsUseCaseImpl): GetFavouriteNewsUseCase = impl
 }

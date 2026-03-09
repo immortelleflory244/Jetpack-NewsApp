@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import be.business.newsapp.domain.model.Article
+import be.business.newsapp.core.domain.model.Article
 import be.business.newsapp.ui.ScreenSizeConfig
 import be.business.newsapp.ui.components.AnimatedFavoriteButton
 import be.business.newsapp.ui.components.NewsImage
@@ -29,7 +29,8 @@ import coil.ImageLoader
 fun NewsItemView(
     article: Article,
     imageLoader: ImageLoader,
-    onFavClick: (article: Article) -> Unit
+    onFavClick: (article: Article) -> Unit,
+    onClick: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -38,7 +39,7 @@ fun NewsItemView(
             .clip(RoundedCornerShape(10.dp))
             .clickable(
                 onClick = {
-
+                    onClick()
                 },
                 indication = LocalIndication.current,
                 interactionSource = remember { MutableInteractionSource() })

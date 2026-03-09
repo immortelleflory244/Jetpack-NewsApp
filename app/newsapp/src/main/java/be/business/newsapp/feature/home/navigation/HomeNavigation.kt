@@ -6,20 +6,22 @@ import be.business.newsapp.feature.articledetail.ArticleDetailsScreen
 import be.business.newsapp.feature.home.presentation.HomeScreen
 import be.business.newsapp.navigation.NewsScreen
 
-fun EntryProviderScope<NavKey>.featureHome(onArticleClick: (String) -> Unit) {
+fun EntryProviderScope<NavKey>.featureHome(
+    onArticleClick: (String) -> Unit,
+    onLoginRequired: () -> Unit
+) {
     entry<NewsScreen.Home> {
         HomeScreen(
             onArticleClick = { id ->
                onArticleClick(id)
-            }
+            },
+            onLoginRequired = onLoginRequired
         )
     }
 
-    entry<NewsScreen.ArticleDetails> { _ ->
+    entry<NewsScreen.ArticleDetails> { route ->
         ArticleDetailsScreen(
-            onArticleClick = { id ->
-                onArticleClick(id)
-            }
+            articleUrl = route.articleId
         )
     }
 }

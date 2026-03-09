@@ -5,9 +5,9 @@ import androidx.navigation3.runtime.NavKey
 import be.business.newsapp.feature.profile.ProfileScreen
 import be.business.newsapp.navigation.NewsScreen
 
-fun EntryProviderScope<NavKey>.featureProfile() {
+fun EntryProviderScope<NavKey>.featureProfile(onLoginClick: () -> Unit) {
 
     entry<NewsScreen.Profile> {
-       ProfileScreen()
+       ProfileScreen(onLoginClick = onLoginClick)
     }
 }

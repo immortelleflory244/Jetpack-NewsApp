@@ -1,5 +1,6 @@
 package be.business.newsapp.domain.model
 
+import be.business.newsapp.core.domain.model.Article
 import be.business.newsapp.domain.model.newsresponse.NewsResponseDto
 
 data class NewsResponse (

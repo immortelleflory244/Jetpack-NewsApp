@@ -3,10 +3,10 @@ package be.business.newsapp.feature.home.presentation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import be.business.newsapp.core.domain.model.Article
 import be.business.newsapp.core.presentation.BaseStateViewModel
-import be.business.newsapp.domain.model.Article
-import be.business.newsapp.domain.usecase.news.AddToFavouritesUseCase
-import be.business.newsapp.domain.usecase.news.GetTopHeadlinesUseCase
+import be.business.newsapp.feature.favorites.domain.ToggleFavoriteUseCase
+import be.business.newsapp.feature.home.domain.usecase.GetTopNewsUseCase
 import coil.ImageLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -17,22 +17,33 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val imageLoader: ImageLoader,
-    val getTopHeadlinesUseCase: GetTopHeadlinesUseCase,
-    val addToFavouritesUseCase: AddToFavouritesUseCase
-) : BaseStateViewModel<HomeAction,
-        HomeResult,
-        HomeEvent,
-        HomeState,
-        HomeReducer>(initialState = HomeState(), reducer = HomeReducer()) {
+    private val getTopNewsUseCase: GetTopNewsUseCase,
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
+) : BaseStateViewModel<HomeAction, HomeResult, HomeEvent, HomeState, HomeReducer>(
+    initialState = HomeState(),
+    reducer = HomeReducer()
+) {
 
     var selectedCategory by mutableStateOf<String?>(null)
         private set
     var selectedCountry by mutableStateOf("us")
         private set
 
+    init {
+        action(HomeAction.FetchTopNewsData(selectedCountry))
+    }
+
+    override fun HomeAction.process(): Flow<HomeResult> = flow {
+        when (this@process) {
+            is HomeAction.FetchTopNewsData -> emitAll(fetchTopNews(country, category))
+            is HomeAction.AddToFavourites -> emitAll(addToFavourites(article))
+            HomeAction.Retry -> emitAll(fetchTopNews(selectedCountry, selectedCategory))
+        }
+    }
+
     fun selectCountry(country: String) {
         selectedCountry = country
-        action(HomeAction.FetchTopNewsData(country))
+        action(HomeAction.FetchTopNewsData(country, selectedCategory))
     }
 
     fun selectCategory(category: String?) {
@@ -40,67 +51,37 @@ class HomeViewModel @Inject constructor(
         action(HomeAction.FetchTopNewsData(selectedCountry, category))
     }
 
-    override fun HomeAction.process(): Flow<HomeResult> = flow {
-        when (this@process) {
-            is HomeAction.FetchTopNewsData -> emitAll(fetchTopNews(country, category))
-            is HomeAction.AddToFavourites -> emitAll(addToFavourites(article))
-//            is HomeAction.FetchSportsNews -> emitAll(fetchSportsNews())
-//            is HomeAction.FetchWeather -> emitAll(fetchWeather())
-        }
-    }
-
-    init {
-        // Auto fetch when ViewModel starts
-        action(HomeAction.FetchTopNewsData(selectedCountry))
-    }
-
     private fun addToFavourites(article: Article): Flow<HomeResult> = flow {
-
-        try {
-            val result = addToFavouritesUseCase(params = article)
-
-            result.fold(
-                onSuccess = { updatedArticle ->
-                    emit(HomeResult.FavouriteUpdated(updatedArticle))
-
-                    emit(
-                        HomeEvent.ShowToast(
-                            if (updatedArticle.isFavorite)
-                                "${article.title} added to Favorites"
-                            else
-                                "${article.title} removed from Favorites"
-                        )
+        toggleFavoriteUseCase(article).fold(
+            onSuccess = { updatedArticle ->
+                emit(HomeResult.FavouriteUpdated(updatedArticle))
+                emitEvent(
+                    HomeEvent.ShowToast(
+                        if (updatedArticle.isFavorite) {
+                            "Added to favorites"
+                        } else {
+                            "Removed from favorites"
+                        }
                     )
-                },
-                onFailure = {
-                    emit(HomeResult.Error(it.message ?: "Unknown Error"))
-                    emitEvent(HomeEvent.ShowToast("Failed to update favorite"))
+                )
+            },
+            onFailure = {
+                val message = it.message ?: "Failed to update favorite"
+                emit(HomeResult.Error(message))
+                if (message.contains("login", ignoreCase = true)) {
+                    emitEvent(HomeEvent.NavigateToLogin)
+                } else {
+                    emitEvent(HomeEvent.ShowToast(message))
                 }
-            )
-
-        } catch (e: Exception) {
-            emit(HomeResult.Error(e.message ?: "Unknown Error"))
-        }
+            }
+        )
     }
-
 
     private fun fetchTopNews(country: String, category: String? = null): Flow<HomeResult> = flow {
         emit(HomeResult.Loading)
-
-        try {
-            val result = getTopHeadlinesUseCase(
-                params = mapOf("country" to country, "category" to (category ?: ""))
-            )
-
-            result.fold(
-                onSuccess = { emit(HomeResult.TopNewsSuccess(it)) },
-                onFailure = { emit(HomeResult.Error(it.message ?: "Unknown Error")) }
-            )
-
-        } catch (e: Exception) {
-            emit(HomeResult.Error(e.message ?: "Unknown Error"))
-        }
+        getTopNewsUseCase(country, category).fold(
+            onSuccess = { emit(HomeResult.TopNewsSuccess(it.article)) },
+            onFailure = { emit(HomeResult.Error(it.message ?: "Unable to load news")) }
+        )
     }
-
-
 }

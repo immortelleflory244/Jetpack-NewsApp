@@ -1,8 +1,8 @@
 package be.business.newsapp.domain.model.newsresponse
 
-import be.business.newsapp.domain.model.Article
+import be.business.newsapp.core.domain.model.Article
+import be.business.newsapp.core.domain.model.Source
 import be.business.newsapp.domain.model.NewsResponse
-import be.business.newsapp.domain.model.Source
 import kotlinx.serialization.Serializable
 
 @Serializable

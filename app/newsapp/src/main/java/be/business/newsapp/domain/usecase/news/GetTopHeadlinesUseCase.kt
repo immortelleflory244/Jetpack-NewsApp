@@ -21,12 +21,10 @@ class GetTopHeadlinesUseCaseImpl @Inject constructor(val repository: NewsReposit
             newsResponseDtoResult.fold(
                 onSuccess = { newsResponseDto ->
                     // Optionally, get favorites URLs from repository
-                    val favoritesUrls = repository.getFavoritesUrls()
-                    println("Favorites URLs: $favoritesUrls")
+                    val favoritesUrls = emptySet<String>()
 
                     // Transform DTO -> Domain
                     val newsResponse = newsResponseDto.toDomain(favoritesUrls)
-                    println(newsResponse)
                     Result.success(newsResponse)
                 },
                 onFailure = { e ->
