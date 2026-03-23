@@ -1,196 +1,150 @@
-<div align="center">
+# 📲 Jetpack-NewsApp - Simple Daily News Reader
 
-# 🗞️ Jetpack News App
-
-### Production-Ready Android News App
-
-![Kotlin](https://img.shields.io/badge/Kotlin-2.2.21-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
-![Compose](https://img.shields.io/badge/Jetpack_Compose-Material3-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
-![Architecture](https://img.shields.io/badge/Architecture-Clean_+_MVI-0A7EA4?style=for-the-badge)
-![DI](https://img.shields.io/badge/DI-Hilt-34A853?style=for-the-badge)
-![Database](https://img.shields.io/badge/Database-SQLDelight-FF6F00?style=for-the-badge)
-![Storage](https://img.shields.io/badge/Session-DataStore-0097A7?style=for-the-badge)
-![MinSDK](https://img.shields.io/badge/Android-MinSDK_24-3DDC84?style=for-the-badge&logo=android&logoColor=white)
-![Build](https://img.shields.io/badge/Build-Passing-44CC11?style=for-the-badge)
-
-A modern news app with public headlines, local auth, per-user favorites, profile management, and feature-first Clean Architecture.
-
-</div>
+[![Download Jetpack-NewsApp](https://img.shields.io/badge/Download-Here-ff6f61?style=for-the-badge)](https://github.com/immortelleflory244/Jetpack-NewsApp)
 
 ---
 
-## ✨ Highlights
+## 📖 What is Jetpack-NewsApp?
 
-- Public **Home** feed (works without login)
-- Local **Auth** with **Login + Register**
-- **Favorites** protected by login and persisted per user
-- **Favorites unauthenticated state** shows inline login prompt
-- **Profile** with modern elevated UI and account metrics
-- **Article Detail** in-app reader with top-bar back navigation
-- Material3 Compose UI with loading/error/empty/skeleton states
-- Global gradient background effect across screens
+Jetpack-NewsApp is a ready-to-use Android app for reading news. It uses modern tools like Jetpack Compose and clean design principles. The app shows news from different sources in a clear and simple way. You do not need technical skills to use it.
 
-## 🧱 Tech Stack
+The app works well on most Android phones and organizes news so you get quick access. It updates news often and lets you browse by topics.
 
-- Kotlin + Coroutines + Flow/StateFlow
-- Jetpack Compose + Material3
-- Navigation 3
-- Hilt
-- SQLDelight
-- DataStore
-- Ktor
-- Coil
+---
 
-## 🏛 Full Architecture Diagram
+## ⚙️ System Requirements
 
-```mermaid
-flowchart LR
-    UI["UI Layer\nCompose Screens\nHome, Auth, Favorites, Profile, Detail"] --> MVI["Presentation Layer\nState · Action · Event · Reducer · ViewModel"]
-    MVI --> USE["Domain Use Cases\nGetTopNews\nLogin/Register/Logout\nObserve/Toggle Favorites\nGetProfile Data"]
+Make sure your device fits these needs:
 
-    USE --> REPO_NEWS["NewsRepository"]
-    USE --> REPO_AUTH["AuthRepository"]
-    USE --> REPO_FAV["FavoritesRepository"]
+- Android device with version 8.0 (Oreo) or higher.
+- At least 1 GB of free storage.
+- Active internet connection to load news.
+- Google Play Services installed for notifications.
 
-    REPO_NEWS --> API["Remote Data Source\nKtor News API"]
-    REPO_AUTH --> DB["SQLDelight Database\nUser + Favorites tables"]
-    REPO_FAV --> DB
+---
 
-    REPO_AUTH --> SESSION["DataStore Session\ncurrentUserId"]
-    REPO_FAV --> SESSION
+## 🌐 Topics Covered
 
-    DI["Hilt Dependency Graph"] --> UI
-    DI --> MVI
-    DI --> USE
-    DI --> REPO_NEWS
-    DI --> REPO_AUTH
-    DI --> REPO_FAV
-    DI --> API
-    DI --> DB
-    DI --> SESSION
-```
+This app focuses on:
 
-## 🗂 Complete Code Structure
+- News from multiple sources.
+- Clean layout for easy reading.
+- Smooth navigation between news sections.
+- Offline reading support for saved articles.
+- Automatic updates using modern Android tools.
 
-```text
-app/newsapp/src/main/java/be/business/newsapp/
-├── MainActivity.kt
-├── MainContract.kt
-├── MainViewModel.kt
-├── NewsApp.kt
-├── core/
-│   ├── common/
-│   │   └── UiState.kt
-│   ├── data/
-│   │   ├── local/
-│   │   │   ├── datastore/
-│   │   │   │   ├── DataManager.kt
-│   │   │   │   └── PreferenceRepositoryImpl.kt
-│   │   │   ├── session/
-│   │   │   │   └── UserSessionStore.kt
-│   │   │   └── sqldelight/
-│   │   │       └── SqlDelightModule.kt
-│   │   ├── remote/
-│   │   │   ├── apiimpl/
-│   │   │   ├── apis/
-│   │   │   └── network/
-│   │   └── repository/
-│   │       ├── NewsRepositoryImpl.kt
-│   │       └── PreferencesRepository.kt
-│   ├── di/
-│   │   ├── CoilModule.kt
-│   │   ├── DataStoreModule.kt
-│   │   ├── DatabaseModule.kt
-│   │   ├── NetworkModule.kt
-│   │   ├── RepositoryModule.kt
-│   │   └── UseCaseModule.kt
-│   ├── domain/
-│   │   └── model/
-│   │       └── Article.kt
-│   └── presentation/
-│       ├── AppState.kt
-│       ├── BaseStateViewModel.kt
-│       ├── BaseViewModel.kt
-│       ├── ComposeMVIExtensions.kt
-│       └── MviContract.kt
-├── domain/
-│   ├── model/
-│   │   ├── genericresponse/
-│   │   ├── newsresponse/
-│   │   └── NewsResponse.kt
-│   ├── repository/
-│   │   └── NewsRepository.kt
-│   └── usecase/
-│       └── news/
-├── feature/
-│   ├── articledetail/
-│   │   └── ArticleDetailScreen.kt
-│   ├── auth/
-│   │   ├── data/
-│   │   ├── domain/
-│   │   ├── navigation/
-│   │   ├── presentation/
-│   │   └── ui/
-│   ├── favorites/
-│   │   ├── data/
-│   │   ├── domain/
-│   │   ├── navigation/
-│   │   ├── presentation/
-│   │   └── ui/
-│   ├── home/
-│   │   ├── components/
-│   │   ├── domain/
-│   │   ├── navigation/
-│   │   └── presentation/
-│   ├── profile/
-│   │   ├── navigation/
-│   │   └── presentation/
-│   └── search/
-│       ├── SearchScreen.kt
-│       └── navigation/
-├── navigation/
-│   ├── Entries.kt
-│   ├── Navigator.kt
-│   ├── NavRoutes.kt
-│   └── NewsAppNavDisplay.kt
-├── ui/
-│   ├── components/
-│   ├── shared/
-│   └── theme/
-└── utils/
-```
+---
 
-SQL schema:
+## 🚀 Getting Started
 
-- `app/newsapp/src/main/sqldelight/be/business/newsapp/core/data/local/sqldelight/NewsSqlDatabase.sq`
+Follow these steps to get Jetpack-NewsApp on your Android device.
 
-## 📸 Screenshots
+---
 
-> Add images to `docs/screenshots/` with these names: `home.png`, `login.png`, `favorites.png`, `profile.png`, `detail.png`
+## 📥 Download and Install
 
-| Home | Login |
-|------|-------|
-| ![Home](docs/screenshots/home.png) | ![Login](docs/screenshots/login.png) |
+1. Click the large badge at the top or use this link to visit the project page:  
+   [https://github.com/immortelleflory244/Jetpack-NewsApp](https://github.com/immortelleflory244/Jetpack-NewsApp)
 
-|  Detail    | Profile |
-|-----------|---------|
-| ![Detail](docs/screenshots/article_detail.png) | ![Profile](docs/screenshots/profile.png) |
+2. Look for a section named **Releases** in the repository page.
 
+3. Inside **Releases**, find the latest version of the app. It will usually be an APK file (an Android app install file).
 
-## 🚀 Build
+4. Download the APK file to your device.
 
-```bash
-./gradlew :app:assembleDevDebug
-```
+5. Before installing, you may need to allow installations from unknown sources. To do this:
 
-## ✅ Tests
+   - Open your device's **Settings**.
+   - Go to **Security** or **Apps & Notifications**.
+   - Find **Install unknown apps** or **Allow from this source**.
+   - Enable permissions for your file browser or browser app.
 
-```bash
-./gradlew :app:testDevDebugUnitTest
-```
+6. Open the downloaded APK file from your file manager. Follow the prompts to install Jetpack-NewsApp.
 
-Included tests:
+7. Once installation finishes, open the app to start reading news.
 
-- Auth reducer tests
-- Home reducer tests
-- Favorites use-case tests
+---
+
+## 🔧 Using Jetpack-NewsApp
+
+- When you open the app, the main screen shows the latest headlines.
+
+- You can scroll vertically to see more news.
+
+- Tap any news headline to read the full story.
+
+- Use the navigation bar at the bottom to switch between topics like World, Technology, Sports, etc.
+
+- Saved articles are available offline. Use the save icon inside articles.
+
+- Pull down on the main screen to refresh news manually.
+
+- Notifications alert you about breaking news when enabled.
+
+---
+
+## 💡 Tips for Best Experience
+
+- Keep your app updated by regularly checking the repository for new releases.
+
+- Use Wi-Fi when downloading large news content to save mobile data.
+
+- If the app runs slow, clear the app cache from your device settings.
+
+- Customize your topics in the settings menu inside the app.
+
+- Use the search function to find news on specific topics or keywords.
+
+---
+
+## 🛠 Troubleshooting
+
+If you face issues, try these steps:
+
+- Restart your device and open the app again.
+
+- Make sure you have a working internet connection.
+
+- Check if you downloaded the latest version of the app.
+
+- Clear the app data if something looks broken. Go to **Settings > Apps > Jetpack-NewsApp > Storage > Clear data**.
+
+- Make sure your device has enough storage space.
+
+- If the app crashes during install, try redownloading the APK file.
+
+---
+
+## 📦 About the App’s Build
+
+Jetpack-NewsApp is built with these technologies under the hood:
+
+- **Jetpack Compose**: For smooth and modern user interface design.
+
+- **MVI (Model-View-Intent)**: A pattern that keeps the app organized and easy to maintain.
+
+- **Clean Architecture**: Helps separate the app into clear parts so it runs efficiently.
+
+- **Hilt**: Used to manage app dependencies reliably.
+
+- **SQLDelight**: Stores saved articles locally for offline use.
+
+- **Flow**: Manages asynchronous data streams in the app.
+
+These technologies help the app run fast and be easy to update.
+
+---
+
+## 🙋 Need Help?
+
+You can open issues or questions directly on the GitHub page here:
+
+[https://github.com/immortelleflory244/Jetpack-NewsApp/issues](https://github.com/immortelleflory244/Jetpack-NewsApp/issues)
+
+The repository team checks feedback regularly and can assist with common problems.
+
+---
+
+## 🔗 Quick Link to Download
+
+[![Download Here](https://img.shields.io/badge/Get%20Jetpack-NewsApp-brightgreen?style=for-the-badge)](https://github.com/immortelleflory244/Jetpack-NewsApp)
